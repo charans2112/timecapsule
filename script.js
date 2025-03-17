@@ -1,3 +1,10 @@
+function slugify(text) {
+    return text
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-') 
+        .replace(/^-+|-+$/g, '');
+}
+
 function saveCapsule() {
     const capsuleName = document.getElementById("capsule-name").value.trim();
     const unlockDate = new Date(document.getElementById("unlock-date").value).getTime();
@@ -11,7 +18,7 @@ function saveCapsule() {
         return;
     }
 
-    let capsuleId = editingCapsuleId || `capsule-${Date.now()}`;
+    let capsuleId = editingCapsuleId || slugify(capsuleName);
     let fileData = null;
     let fileType = null;
 
@@ -60,7 +67,7 @@ function loadCapsuleHistory() {
         const listItem = document.createElement("li");
         listItem.innerHTML = `
             <strong>${capsuleName}</strong> (Unlocks: ${unlockDateFormatted})
-            <a href="capsule.html?capsule=${capsuleId}" target="_blank">Open</a>
+            <a href="capsule.html?capsule=${encodeURIComponent(capsuleId)}" target="_blank">Open</a>
             <button onclick="editCapsule('${capsuleId}')">Edit</button>
             <button onclick="deleteCapsule('${capsuleId}')">Delete</button>
         `;
